@@ -1,0 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'be.filipblondeel.gradle:gradle-gulp-plugin:0.1'
+    }
+}
+
+apply plugin: 'gulp'
+
+node {
+    download = true
+}
+
+[gulp_build, gulp_build]*.dependsOn 'installGulp', 'npmInstall'
