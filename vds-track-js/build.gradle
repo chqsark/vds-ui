@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'be.filipblondeel.gradle:gradle-gulp-plugin:0.1'
+        classpath "com.monochromeroad.gradle-plugins:gradle-aws-s3-sync:0.7"
     }
 }
 
@@ -16,4 +17,18 @@ node {
 [gulp_build, gulp_watch]*.dependsOn 'installGulp', 'npmInstall'
 
 task build(dependsOn: 'gulp_build') {
+}
+
+import com.monochromeroad.gradle.plugin.aws.s3.S3Sync
+
+task deploy(type: S3Sync) {
+    description = "Deploys to s3."
+
+    accessKey = "$System.env.AWS_ACCESS_KEY_ID"
+    secretKey = "$System.env.AWS_SECRET_ACCESS_KEY"
+
+    configFile "synchronizer.properties"
+
+    from "build"
+    into "vds.polyforms.org"
 }
