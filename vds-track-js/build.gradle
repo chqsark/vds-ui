@@ -13,4 +13,7 @@ node {
     download = true
 }
 
-[gulp_build, gulp_build]*.dependsOn 'installGulp', 'npmInstall'
+[gulp_build, gulp_watch]*.dependsOn 'installGulp', 'npmInstall'
+
+task build(dependsOn: 'gulp_build') {
+}
