@@ -11,12 +11,6 @@
     ]
   },
   "browserify-shim": {
-    "plugin": {
-      "exports": "plugin",
-      "depends": [
-        "jquery:$"
-      ]
-    }
   },
   "devDependencies": {
     "browser-sync": "~0.8.2",
@@ -34,6 +28,5 @@
     "pretty-hrtime": "~0.2.1"
   },
   "dependencies": {
-    "jquery": "~2.1.0"
   }
 }
