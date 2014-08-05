@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Javascript to track dom mutation and events",
   "browser": {
+    "tree-mirror": "./src/javascript/vendor/tree-mirror.js"
   },
   "browserify": {
     "transform": [
@@ -28,5 +29,6 @@
     "pretty-hrtime": "~0.2.1"
   },
   "dependencies": {
+    "mutation-summary": "latest"
   }
 }
