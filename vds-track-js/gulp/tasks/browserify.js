@@ -12,6 +12,8 @@ var bundleLogger = require('../util/bundleLogger');
 var gulp         = require('gulp');
 var handleErrors = require('../util/handleErrors');
 var source       = require('vinyl-source-stream');
+var uglify       = require('gulp-uglify');
+var streamify = require('gulp-streamify');
 
 gulp.task('browserify', function() {
 
@@ -30,18 +32,22 @@ gulp.task('browserify', function() {
 		// Log when bundling starts
 		bundleLogger.start();
 
-		return bundler
+		var stream = bundler
 			.bundle()
 			// Report compile errors
 			.on('error', handleErrors)
 			// Use vinyl-source-stream to make the
 			// stream gulp compatible. Specifiy the
 			// desired output filename here.
-			.pipe(source('vds-track.js'))
+			.pipe(source('vds-track.js'));
+			if (!global.isWatching) {
+			    stream.pipe(streamify(uglify()))
+			}
 			// Specify the output destination
-			.pipe(gulp.dest('./build/'))
+			stream.pipe(gulp.dest('./build/'))
 			// Log when bundling completes!
 			.on('end', bundleLogger.end);
+	    return stream;
 	};
 
 	if(global.isWatching) {
