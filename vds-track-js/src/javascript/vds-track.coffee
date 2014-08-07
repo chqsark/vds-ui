@@ -1,17 +1,23 @@
 TreeMirror = require ('tree-mirror')
+uuid = require('node-uuid')
 
+sessionId = uuid.v4()
 callback =
   initialize: (rootId, children) ->
     message =
-      f: 'initialize'
-      args: [
-        rootId
-        children
+      type: 'initialize'
+      session: sessionId
+      time: Date.now()
+      args:
+        rootId: rootId
+        children: children
     console.log JSON.stringify(message)
 
   applyChanged: (removed, addedOrMoved, attributes, text) ->
     message =
-      f: 'applyChanged'
+      type: 'change'
+      session: sessionId
+      time: Date.now()
       args:
         removed: removed
         addedOrMoved: addedOrMoved
