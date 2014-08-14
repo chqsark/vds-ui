@@ -311,5 +311,4 @@ var TreeMirrorClient = (function () {
     return TreeMirrorClient;
 })();
 
-exports.TreeMirror = TreeMirror;
-exports.TreeMirrorClient = TreeMirrorClient;
+exports.Client = TreeMirrorClient;

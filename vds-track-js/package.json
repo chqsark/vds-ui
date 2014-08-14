@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Javascript to track dom mutation and events",
   "browser": {
-    "tree-mirror": "./src/javascript/vendor/tree-mirror.js"
+    "tree-mirror": "./src/javascript/vendor/tree-mirror.js",
+    "sockjs-client": "./src/javascript/vendor/sockjs.js",
+    "stompjs": "./src/javascript/vendor/stomp.js"
   },
   "browserify": {
     "transform": [
@@ -12,6 +14,7 @@
     ]
   },
   "browserify-shim": {
+    "stompjs": "Stomp"
   },
   "devDependencies": {
     "browser-sync": "~0.8.2",

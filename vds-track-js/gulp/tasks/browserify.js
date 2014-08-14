@@ -21,7 +21,7 @@ gulp.task('browserify', function() {
 
 	var bundler = bundleMethod({
 		// Specify the entry point of your app
-		entries: ['./src/javascript/vds-track.coffee'],
+		entries: ['./src/javascript/vds.coffee'],
 		// Add file extentions to make optional in your requires
 		extensions: ['.coffee'],
 		// Enable source maps!
@@ -39,7 +39,7 @@ gulp.task('browserify', function() {
 			// Use vinyl-source-stream to make the
 			// stream gulp compatible. Specifiy the
 			// desired output filename here.
-			.pipe(source('vds-track.js'));
+			.pipe(source('vds.js'));
 			if (!global.isWatching) {
 			    stream.pipe(streamify(uglify()))
 			}
