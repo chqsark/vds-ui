@@ -5,30 +5,31 @@ TreeMirror = require 'tree-mirror'
 
 socket = new SockJS 'http://vds-api.herokuapp.com/stomp'
 stompClient = Stomp.over socket
+stompClient.maxWebSocketFrameSize = 12 * 1024
 
 stompClient.connect {}, (frame) ->
-  sessionId = uuid.v4()
+  trackId = uuid.v4()
   callback =
     initialize: (rootId, children) ->
       message =
         type: 'initialize'
-        session: sessionId
+        id: trackId
         time: Date.now()
         args:
           rootId: rootId
           children: children
-      stompClient.send "/track/dom", {}, JSON.stringify(message)
+      stompClient.send "/track/" + trackId, {}, JSON.stringify(message)
 
     applyChanged: (removed, addedOrMoved, attributes, text) ->
       message =
         type: 'change'
-        session: sessionId
+        id: trackId
         time: Date.now()
         args:
           removed: removed
           addedOrMoved: addedOrMoved
           attributes: attributes
           text: text
-      stompClient.send "/track/dom", {}, JSON.stringify(message)
+      stompClient.send "/track/" + trackId, {}, JSON.stringify(message)
 
   mirrorClient = new TreeMirror.Client document,callback
