@@ -15,18 +15,41 @@ class Tracker
   set: (key, value) ->
     @properties[key] = value
 
-  getTrackerUrl: ->
-    (if 'https:' == document.location.protocol then 'https://' else 'http://') + @host + '/stomp'
+  getTrackerUrl = (host)->
+    (if 'https:' == document.location.protocol then 'https://' else 'http://') + host + '/stomp'
 
-  connect: ->
-    socket = new SockJS @getTrackerUrl()
+  ID_PROP = '__mutation_summary_node_map_id__'
+  addEventListener = (element, eventType, eventHandler) ->
+    if element.addEventListener
+      element.addEventListener eventType, eventHandler, false
+    else if element.attachEvent
+      element.attachEvent('on' + eventType, eventHandler)
+    else
+      element['on' + eventType] = eventHandler
+
+  connect: (buffer)->
+    socket = new SockJS getTrackerUrl(@host)
     stompClient = Stomp.over socket
     stompClient.maxWebSocketFrameSize = 12 * 1024
 
     stompClient.connect {}, (frame) =>
       trackId = uuid.v4()
 
-      callback =
+      eventHandler = (event) ->
+        message =
+          type: 'event'
+          id: trackId
+          time: event.timeStamp || Date.now()
+          event:
+            id: event.target[ID_PROP]
+            type: event.type
+
+        if stompClient.connected
+          stompClient.send "/track/" + trackId, {}, JSON.stringify(message)
+        else
+          mirrorClient?.disconnect()
+          @connect(-> stompClient.send "/track/" + trackId, {}, JSON.stringify(message))
+      domObserver =
         initialize: (rootId, children) =>
           message =
             type: 'initialize'
@@ -56,7 +79,9 @@ class Tracker
             mirrorClient?.disconnect()
             @connect()
 
-      mirrorClient = new TreeMirror.Client document,callback
+      buffer?()
+      addEventListener document, event, eventHandler for event in ['click']
+      mirrorClient = new TreeMirror.Client document, domObserver
 
 apply = (name, args...)->
   tracker[name].apply tracker, args
