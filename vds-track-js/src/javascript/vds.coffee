@@ -1,6 +1,7 @@
 uuid = require 'node-uuid'
 SockJS = require 'sockjs-client'
 Stomp = require 'stompjs'
+require 'mutationobservers'
 TreeMirror = require 'tree-mirror'
 
 class Tracker

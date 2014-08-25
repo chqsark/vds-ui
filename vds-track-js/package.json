@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "mutation-summary": "latest",
+    "mutationobservers": "~0.0.1",
     "node-uuid": "~1.4.1"
   }
 }
