@@ -73,6 +73,19 @@
 <script src="js/services/todoStorage.js"></script>
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoEscape.js"></script>
-<script src="vds.js"></script>
+<script type="text/javascript">
+    var _vds = _vds || [];
+    (function(){
+        //_vds.push(['setTrackerHost', 'vds-api.herokuapp.com']);
+        _vds.push(['setAccountId', 'xxxx-xxxx-xxxx-xxxx']);
+        //_vds.push(['set', 'user', 'ktong']);
+
+        (function() {
+            var vds = document.createElement('script'); vds.type = 'text/javascript'; vds.async = true;
+            vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + document.location.host + '/vds.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(vds, s);
+        })();
+    })();
+</script>
 </body>
 </html>
