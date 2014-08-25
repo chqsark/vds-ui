@@ -21,7 +21,7 @@ class Tracker
   ID_PROP = '__mutation_summary_node_map_id__'
   addEventListener = (element, eventType, eventHandler) ->
     if element.addEventListener
-      element.addEventListener eventType, eventHandler, false
+      element.addEventListener eventType, eventHandler, true
     else if element.attachEvent
       element.attachEvent('on' + eventType, eventHandler)
     else
