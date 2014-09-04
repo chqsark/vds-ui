@@ -3,8 +3,10 @@ TreeMirror = require 'tree-mirror' # Utility class from Mutation Summary to dete
 
 class DomObserver
   mirrorClient = null
-
   registerDomObserver: ->
+    ###
+    # Disconnect existed mirror client to aviod double observing
+    ###
     mirrorClient?.disconnect()
     domObserver =
       initialize: (rootId, children) =>
@@ -31,7 +33,12 @@ class DomObserver
         @send message, false
     mirrorClient = new TreeMirror.Client document, domObserver
 
+  eventHandler = null
   registerEventListener: ->
+    events = ['click'] # Events listened
+    ###
+    # Unique id added by Mutation Summary to track node. Send to server to identify the node which event tagets on
+    ###
     ID_PROP = '__mutation_summary_node_map_id__'
 
     addEventListener = (element, eventType, eventHandler) ->
@@ -52,11 +59,14 @@ class DomObserver
 
       @send message
 
-    addEventListener document, event, eventHandler for event in ['click']
+    addEventListener document, event, eventHandler for event in events
 
-  connect: (send) ->
+  observe: (send) ->
     @send = send
-    @registerEventListener() unless mirrorClient
+    ###
+    # Only register once for each event listener to avoid duplicate listeners send same events multiple times
+    ###
+    @registerEventListener() unless eventHandler
     @registerDomObserver()
 
 module.exports = DomObserver
